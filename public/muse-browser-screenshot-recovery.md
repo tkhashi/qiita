@@ -1,16 +1,18 @@
 ---
 title: Muse の組み込みブラウザで撮ったスクリーンショットをファイルとして回収する方法
 tags:
-- Muse
-- AIエージェント
-- ブラウザ自動化
-- スクリーンショット
+  - Muse
+  - AIエージェント
+  - ブラウザ自動化
+  - スクリーンショット
 private: true
-updated_at: null
-id: ''
+updated_at: '2026-11-15T03:54:15+09:00'
+id: c06b4c5af750d30bb855
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 # はじめに
