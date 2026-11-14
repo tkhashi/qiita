@@ -27,7 +27,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 - サンプル: https://github.com/tkhashi/Autodesk.Sandbox
 
-> 📷 スクショ凡例: この下書きでは `📷` の行がスクリーンショットの差し込み位置です（撮影台帳の番号と対応）。
+> スクリーンショットはすべて今回の検証環境で実際に撮影したものです。メールアドレス・電話番号・Client ID・注文番号などはマスキングしています。
 
 ## 全体像：「ハブ」と「チーム」が3種類ある
 
@@ -76,7 +76,10 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 - **2段階認証のバックアップコードは、その場で必ず控える。** 後から確認する手段がありません。認証アプリ（Google Authenticator 等）の登録とセットで保管してください。
 - 自動化ツールや一部ブラウザ環境では hCaptcha を通過できないことがあります。その場合は手作業で通すしかありません。
 
-> 📷 スクショ: アカウント作成フロー（メールコード入力画面）
+![アカウント作成フォーム](../assets/forma-api-environment-setup/117_create_account_form.jpg)
+![hCaptcha のチャレンジ画面](../assets/forma-api-environment-setup/118_hcaptcha_challenge.jpg)
+
+*アカウント作成の入口と、立ちはだかる hCaptcha（メールコード入力画面そのものは撮影できなかったため、この2枚で代用）。*
 
 ## Step 2: APS オファリングの取得（Free tier）
 
@@ -89,7 +92,8 @@ Free tier でも、**本人確認のために支払い方法の登録が必須**
 - 実際に Free を注文したときの合計は **¥0** でした（本人確認用にカードを登録）
 - 「無料のはず」という理由で身構える必要はありませんが、**実際に課金が発生する／有料プランが開始する場合は別**です。金額表示は必ず確認してください
 
-> 📷 スクショ: 台帳026/029 APS Free の課金サマリーと注文履歴（合計¥0。注文番号・カード末尾はマスキング）
+![課金サマリー（「1件のサブスクリプションまたは契約」として APS Free が入っている）](../assets/forma-api-environment-setup/026_billing_summary.jpg)
+![注文履歴（APS Free、合計 ¥0）](../assets/forma-api-environment-setup/029_order_history.jpg)
 
 [^1]: [APS Business Model Evolution | Autodesk Platform Services](https://aps.autodesk.com/blog/aps-business-model-evolution)
 [^2]: [Autodesk Platform Services | Autodesk](https://www.autodesk.com/sg/products/autodesk-platform-services/overview)
@@ -104,8 +108,8 @@ API の操作対象になる Forma ハブを用意します。今回は Forma Da
 - **ハブを作成できるのは、チームの primary / secondary admin（有効なサブスクリプションがあること）**です。自分にその権限がない場合は管理者への依頼が必要です。[^3]
 - **データリージョンは選べないことがある。** 今回のトライアルでは開始時に選択肢が提示されず、ハブのリージョンは米国になりました。リージョンが要件にある場合は先に確認してください。
 
-> 📷 スクショ: 台帳003 Trials 一覧（Data Management のみ有効な状態）
-> 📷 スクショ: 台帳025 ハブ一覧（Forma ハブ、リージョン表示）
+![Trials 一覧（Forma Data Management のトライアルが有効、残り30日）](../assets/forma-api-environment-setup/104_trials.jpg)
+![ハブ一覧（Forma ハブ、地域は米国）](../assets/forma-api-environment-setup/025_hubs_list.jpg)
 
 [^3]: [Collaboration | Autodesk Support](https://www.autodesk.com/support/account/admin/users/collaboration)
 
@@ -123,9 +127,11 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 - **コールバック URL が空欄だと保存エラー**になります。先に入力してから保存してください。
 - Client Secret の取り扱いは「パスワードと同等」です。`.env` 等に置き、リポジトリには絶対に含めないでください。
 
-> 📷 スクショ: 台帳032〜034 APS 開発者ハブの作成〜有効化
-> 📷 スクショ: 台帳045 アプリ作成完了・Client ID 表示（Client ID 全体はマスキング）
-> 📷 スクショ: 台帳049/052 コールバック URL と API Access（24 API の一覧）
+![APS Developer Hub のセットアップ](../assets/forma-api-environment-setup/113_hub_setup_dialog.jpg)
+![Developer Hub の有効化完了](../assets/forma-api-environment-setup/114_hub_activated.jpg)
+![アプリの Client Credentials（Client ID はマスキング、Secret は伏せ字表示）](../assets/forma-api-environment-setup/103_aps_app_settings.jpg)
+![コールバック URL の設定](../assets/forma-api-environment-setup/116_callback_url.jpg)
+![API Access の選択リスト](../assets/forma-api-environment-setup/112_api_access_list.jpg)
 
 [^4]: [Developer hubs user guide | Autodesk Platform Services](https://aps.autodesk.com/blog/developer-hubs-user-guide)
 
@@ -161,10 +167,10 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 カスタム統合を追加するとき、**統合がハブ管理者権限で動作する**旨の警告ダイアログが出ます。これは仕様です。権限を絞りたい場合は **Secure Service Accounts (SSA)** を使う構成が用意されています（SSA が無い統合はハブ管理者として動作し、SSA を紐づければプロジェクト単位で権限を制御できます）。[^7][^8]
 
-> 📷 スクショ: カスタム統合の一覧画面（登録済みアプリの行）【撮影済み・差し込み待ち】
-> 📷 スクショ: 「カスタム統合機能を追加」ダイアログ【撮影済み・差し込み待ち】
-> 📷 スクショ: アクセス権限の警告ダイアログ（ハブ管理者権限の表示）【撮影済み・差し込み待ち】
-> 📷 スクショ: hubs 0件 → 1件の比較（実応答JSONの要約図 `110_hubs_before_after.png` をアップロードして差し込む）
+![カスタム統合の一覧画面（登録済みアプリの行）](../assets/forma-api-environment-setup/101_custom_integrations.jpg)
+![「カスタム統合機能を追加」ダイアログ](../assets/forma-api-environment-setup/105_add_integration_dialog.jpg)
+![アクセス権限の警告ダイアログ（ハブ管理者権限の表示）](../assets/forma-api-environment-setup/107_hub_admin_warning.jpg)
+![hubs 0件 → 1件の比較（実応答 JSON の要約図）](../assets/forma-api-environment-setup/110_hubs_before_after.png)
 
 [^5]: [APS Getting Started Tutorials](https://get-started.aps.autodesk.com/)
 [^6]: [Custom Integrations | Autodesk Forma Help](https://help.autodesk.com/cloudhelp/ENU/Docs-Admin/files/hub-administration/Custom_Integrations.html)
