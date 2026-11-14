@@ -135,7 +135,7 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 アプリの Client ID を、対象の Forma ハブ側の管理機能「カスタム統合（Custom Integrations）」に登録・承認する作業が必要です。APS のドキュメントではこの手続きを指して provisioning（プロビジョニング）という言葉が使われます。公式チュートリアルでも、プロビジョニングには対象ハブへの **admin アクセス** が必要とされています。[^5]
 
-手順は、Forma ハブの管理画面で `Account Admin（Hub Admin）→ Settings → Custom Integrations` を開き、Client ID を追加するだけです。[^6]
+手順は、Forma ハブの管理画面（Hub Admin）の「カスタム統合」を開き、Client ID を追加するだけです（現行 UI では左ナビの独立項目。旧 ACC UI では `Settings → Custom Integrations`）。[^6]
 
 ### ⚠️ つまづきポイント①：200 なのに 0 件
 
@@ -161,9 +161,10 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 カスタム統合を追加するとき、**統合がハブ管理者権限で動作する**旨の警告ダイアログが出ます。これは仕様です。権限を絞りたい場合は **Secure Service Accounts (SSA)** を使う構成が用意されています（SSA が無い統合はハブ管理者として動作し、SSA を紐づければプロジェクト単位で権限を制御できます）。[^7][^8]
 
-> 📷 スクショ: カスタム統合の一覧画面と「Add custom integration」
-> 📷 スクショ: カスタム統合の警告ダイアログ（ハブ管理者権限の表示）
-> 📷 スクショ: hubs 0件 → 1件に変わるターミナル出力の比較
+> 📷 スクショ: カスタム統合の一覧画面（登録済みアプリの行）【撮影済み・差し込み待ち】
+> 📷 スクショ: 「カスタム統合機能を追加」ダイアログ【撮影済み・差し込み待ち】
+> 📷 スクショ: アクセス権限の警告ダイアログ（ハブ管理者権限の表示）【撮影済み・差し込み待ち】
+> 📷 スクショ: 【要再撮り】hubs 0件 → 1件に変わるターミナル出力の比較
 
 [^5]: [APS Getting Started Tutorials](https://get-started.aps.autodesk.com/)
 [^6]: [Custom Integrations | Autodesk Forma Help](https://help.autodesk.com/cloudhelp/ENU/Docs-Admin/files/hub-administration/Custom_Integrations.html)
