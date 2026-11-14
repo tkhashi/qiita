@@ -6,7 +6,7 @@ tags:
   - ブラウザ自動化
   - スクリーンショット
 private: true
-updated_at: '2026-11-15T04:51:44+09:00'
+updated_at: '2026-11-15T04:52:37+09:00'
 id: c06b4c5af750d30bb855
 organization_url_name: null
 slide: false
