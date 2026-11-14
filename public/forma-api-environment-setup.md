@@ -44,6 +44,16 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 1. APS アプリの **Client ID / Client Secret**
 2. 操作先の **Forma ハブ・プロジェクト**（＋そのハブへのアプリの許可＝カスタム統合）
 
+## 用語メモ（全部 Autodesk の公式用語です）
+
+この記事に出てくる分かりにくい言葉は、どれも Autodesk の製品・ドキュメント上の正式な用語です。先に意味だけ押さえてください。
+
+| 用語 | 意味 |
+|---|---|
+| オファリング（offering） | APS の利用プラン（提供形態）のこと。Free / Prepay（前払い）/ Pay as You Go（従量）の3種があり、チーム単位で取得する |
+| カスタム統合（Custom Integrations） | Forma ハブの管理画面にある機能の名前。APS アプリの Client ID をここに登録すると、そのアプリがそのハブのデータにアクセスできるようになる |
+| プロビジョニング（provisioning） | 上記の「アプリにアクセス権を与える」手続き自体を指す APS ドキュメントの言葉（"Provision access"）。アプリを作るだけでは権限は付かず、この手続きが別途必要 |
+
 ## 手順の地図
 
 ```
@@ -70,7 +80,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 ## Step 2: APS オファリングの取得（Free tier）
 
-APS（Autodesk Platform Services）の現在のビジネスモデルでは、**チームに APS のオファリング（無料の Free tier 含む）を紐づけ、そのチームの中に Developer Hub を作る**ことが必須になっています。[^1]
+APS（Autodesk Platform Services）の現在のビジネスモデルでは、**チームに APS のオファリング（＝利用プラン。無料の Free tier 含む）を紐づけ、そのチームの中に Developer Hub を作る**ことが必須になっています。[^1]
 
 ### ⚠️ つまづきポイント：無料でもクレジットカード登録が必要
 
@@ -123,7 +133,7 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 **APS アプリを作っただけでは、Forma のデータは見えません。**
 
-アプリの Client ID を、対象の Forma ハブ側で「カスタム統合」として登録・承認する作業（プロビジョニング）が必要です。公式チュートリアルでも、プロビジョニングには対象ハブへの **admin アクセス** が必要とされています。[^5]
+アプリの Client ID を、対象の Forma ハブ側の管理機能「カスタム統合（Custom Integrations）」に登録・承認する作業が必要です。APS のドキュメントではこの手続きを指して provisioning（プロビジョニング）という言葉が使われます。公式チュートリアルでも、プロビジョニングには対象ハブへの **admin アクセス** が必要とされています。[^5]
 
 手順は、Forma ハブの管理画面で `Account Admin（Hub Admin）→ Settings → Custom Integrations` を開き、Client ID を追加するだけです。[^6]
 
@@ -131,7 +141,7 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 プロビジョニング前は、Data Management API の `GET /project/v1/hubs` が **HTTP 200 で、しかし中身は0件** で返ります。エラーにならないので「プロジェクトが無いのか？」と誤解しがちです。
 
-見分け方はレスポンスの `meta.warnings` です。全リージョン分の `BIM360DM 403 "You don't have permission to access this API"` が入っていれば、プロビジョニング未了が原因です。カスタム統合を登録すると、**数分の反映ラグ**のあとハブが見えるようになります。
+見分け方は「**data が0件で、`meta.warnings` に `BIM360DM 403 "You don't have permission to access this API"` だけが入っている**」ことです。なお warnings 自体はプロビジョニング後も残ります（自分のハブが無いリージョン分）。0件かどうかが判断ポイントです。カスタム統合を登録すると、**数分の反映ラグ**のあとハブが見えるようになります。
 
 ### ⚠️ つまづきポイント②：「カスタム統合」の画面自体が出ない（企業アカウント）
 
@@ -184,7 +194,7 @@ GET /project/v1/hubs/{hubId}/projects/{projectId}/topFolders
 |---|---|---|---|
 | 1 | 無料の Free でカード登録を求められる | 本人確認のため（仕様） | 登録してよい。ただし金額表示は要確認（¥0） |
 | 2 | ハブが作れない | 作成はチームの primary/secondary admin のみ | 管理者に依頼 |
-| 3 | hubs が 200 なのに 0 件 | プロビジョニング未了 | カスタム統合に Client ID を登録し、数分待つ |
+| 3 | hubs が 200 なのに 0 件 | プロビジョニング（権限付与の手続き）未了 | カスタム統合に Client ID を登録し、数分待つ |
 | 4 | カスタム統合の画面が出ない | ハブがライセンスのあるチーム上に無い | そのチーム上にハブを作ってもらう |
 | 5 | ドメイン API が 403 / 401 | 2-legged で叩いている | 3-legged トークンを使う |
 | 6 | プロジェクト ID が合わない | `b.` 接頭辞の有無 | ドメイン API では接頭辞なし |
