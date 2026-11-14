@@ -6,7 +6,7 @@ tags:
   - ブラウザ自動化
   - スクリーンショット
 private: true
-updated_at: '2026-11-15T05:16:41+09:00'
+updated_at: '2026-11-15T03:54:15+09:00'
 id: c06b4c5af750d30bb855
 organization_url_name: null
 slide: false
@@ -56,11 +56,11 @@ Meta のパーソナル AI エージェント「Muse」には、エージェン�
 
 ```json
 {
-  "ts": "20261114T092402.581538434Z",
-  "url": "https://acc.autodesk.com/account-admin/custom-integrations/...",
-  "title": "カスタム統合 - Hub Administration",
-  "viewport": {"w": 801, "h": 905, "scroll_y": 0, "scroll_max": 0},
-  "files": [{"name": "look.0.jpg", "sha256": "...", "bytes": 80977}]
+  "ts": "20260101T120000.000000000Z",
+  "url": "https://example.com/dashboard",
+  "title": "ダッシュボード - サンプルサービス",
+  "viewport": {"w": 1200, "h": 900, "scroll_y": 0, "scroll_max": 0},
+  "files": [{"name": "look.0.jpg", "sha256": "...", "bytes": 81234}]
 }
 ```
 
@@ -74,8 +74,8 @@ URL・タイトル・ビューポートサイズ・ハッシュまで記録さ�
 
 ```bash
 cd ~/workspace/.hatch-browser/snapshots/browser-task:<タスクID>/
-grep -l "custom-integrations" */manifest.json   # URL の一部で検索
-grep -l "カスタム統合" */manifest.json            # タイトルでも検索可
+grep -l "dashboard" */manifest.json   # URL の一部で検索
+grep -l "ダッシュボード" */manifest.json            # タイトルでも検索可
 ```
 
 3. 候補の manifest で `viewport` と `ts` を確認し、画像を目視で検証する
@@ -87,15 +87,6 @@ cp <候補フォルダ>/look.0.jpg ~/workspace/<用途フォルダ>/<画面名>.
 ```
 
 これで通常の画像ファイルとして、チャットへの添付や GitHub／Qiita へのアップロードに使えます。
-
-# 検証結果
-
-2026-11-15 時点の実績です。
-
-- example.com のテストタスク：1919×998 の JPEG として回収可能
-- 別プロジェクト（Autodesk Forma の API 環境構築ガイドの取材）のブラウザセッションでは、**1セッションだけで427枚**のスナップショットが残っていた
-  - 「回収できない」と判断していたカスタム統合一覧のスクリーンショットも、ここから回収できた（日本語の文字化けなし）
-- 全タスク合計で695ファイル・約134MB。1週間前のセッション分も残っていた
 
 # 注意点
 
