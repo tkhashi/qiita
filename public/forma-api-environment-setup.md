@@ -164,7 +164,7 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 > 📷 スクショ: カスタム統合の一覧画面（登録済みアプリの行）【撮影済み・差し込み待ち】
 > 📷 スクショ: 「カスタム統合機能を追加」ダイアログ【撮影済み・差し込み待ち】
 > 📷 スクショ: アクセス権限の警告ダイアログ（ハブ管理者権限の表示）【撮影済み・差し込み待ち】
-> 📷 スクショ: hubs 0件 → 1件に変わるターミナル出力の比較【実応答で再現済み・画像化待ち】
+> 📷 スクショ: hubs 0件 → 1件の比較（実応答JSONの要約図 `110_hubs_before_after.png` をアップロードして差し込む）
 
 [^5]: [APS Getting Started Tutorials](https://get-started.aps.autodesk.com/)
 [^6]: [Custom Integrations | Autodesk Forma Help](https://help.autodesk.com/cloudhelp/ENU/Docs-Admin/files/hub-administration/Custom_Integrations.html)
