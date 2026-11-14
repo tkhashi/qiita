@@ -80,17 +80,6 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 ![アカウント作成フォーム](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/117_create_account_form.jpg)
 
-### ⚠️ つまづきポイント
-
-- **2段階認証のバックアップコードは、その場で必ず控える。** 後から確認する手段がありません。認証アプリ（Google Authenticator 等）の登録とセットで保管してください。
-- 自動化ツールや一部ブラウザ環境では hCaptcha を通過できないことがあります。その場合は手作業で通すしかありません。
-
-その本人確認で表示される hCaptcha のチャレンジ画面がこちらです。
-
-![hCaptcha のチャレンジ画面](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/118_hcaptcha_challenge.jpg)
-
-*※メールコード入力画面そのものは撮影できなかったため、掲載していません。*
-
 ## Step 2: APS オファリングの取得（Free tier）
 
 APS（Autodesk Platform Services）の現在のビジネスモデルでは、**チームに APS のオファリング（＝利用プラン。無料の Free tier 含む）を紐づけ、そのチームの中に Developer Hub を作る**ことが必須になっています。[^1]
