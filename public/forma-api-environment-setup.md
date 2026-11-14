@@ -8,7 +8,7 @@ tags:
   - API
 private: true
 updated_at: '2026-11-15T05:11:35+09:00'
-id: cf770f189370731ec9e4
+id: ''
 organization_url_name: null
 slide: false
 ignorePublish: false
