@@ -36,6 +36,8 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 つまづきの半分は、この3つを混同することから起きます。
 
+![Forma API 環境構築の全体像](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/forma-overall-diagram.png)
+
 | 名前 | 何か | どこで作るか |
 |---|---|---|
 | Autodesk Team（チーム） | サブスクリプションとライセンスの所有単位 | Autodesk Account |
