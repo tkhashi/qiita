@@ -5,7 +5,7 @@ tags:
   - AIエージェント
   - ブラウザ自動化
   - スクリーンショット
-private: true
+private: false
 updated_at: '2026-11-15T05:35:33+09:00'
 id: c06b4c5af750d30bb855
 organization_url_name: null

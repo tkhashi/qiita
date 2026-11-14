@@ -6,7 +6,7 @@ tags:
   - forma
   - ACC
   - API
-private: true
+private: false
 updated_at: '2026-11-15T05:35:33+09:00'
 id: 021030420a0dbe037576
 organization_url_name: null
