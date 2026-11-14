@@ -7,6 +7,7 @@ tags:
 - スクリーンショット
 private: true
 updated_at: null
+id: ''
 organization_url_name: null
 slide: false
 ignorePublish: false
