@@ -76,15 +76,20 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 公式サイトから新規アカウントを作成します。流れは「メールアドレス → 本人確認（hCaptcha）→ メールコード（6桁）→ 氏名・パスワード」でした。
 
+作成の入口になる登録フォームは、このような画面です。
+
+![アカウント作成フォーム](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/117_create_account_form.jpg)
+
 ### ⚠️ つまづきポイント
 
 - **2段階認証のバックアップコードは、その場で必ず控える。** 後から確認する手段がありません。認証アプリ（Google Authenticator 等）の登録とセットで保管してください。
 - 自動化ツールや一部ブラウザ環境では hCaptcha を通過できないことがあります。その場合は手作業で通すしかありません。
 
-![アカウント作成フォーム](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/117_create_account_form.jpg)
+その本人確認で表示される hCaptcha のチャレンジ画面がこちらです。
+
 ![hCaptcha のチャレンジ画面](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/118_hcaptcha_challenge.jpg)
 
-*アカウント作成の入口と、立ちはだかる hCaptcha（メールコード入力画面そのものは撮影できなかったため、この2枚で代用）。*
+*※メールコード入力画面そのものは撮影できなかったため、掲載していません。*
 
 ## Step 2: APS オファリングの取得（Free tier）
 
@@ -97,7 +102,12 @@ Free tier でも、**本人確認のために支払い方法の登録が必須**
 - 実際に Free を注文したときの合計は **¥0** でした（本人確認用にカードを登録）
 - 「無料のはず」という理由で身構える必要はありませんが、**実際に課金が発生する／有料プランが開始する場合は別**です。金額表示は必ず確認してください
 
+注文が完了すると、Autodesk Account の課金サマリーに APS Free が「1件のサブスクリプションまたは契約」として計上されます。
+
 ![課金サマリー（「1件のサブスクリプションまたは契約」として APS Free が入っている）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/026_billing_summary.jpg)
+
+実際の注文履歴でも、APS Free の合計は ¥0 で、課金されていないことが確認できます。
+
 ![注文履歴（APS Free、合計 ¥0）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/029_order_history.jpg)
 
 [^1]: [APS Business Model Evolution | Autodesk Platform Services](https://aps.autodesk.com/blog/aps-business-model-evolution)
@@ -107,13 +117,18 @@ Free tier でも、**本人確認のために支払い方法の登録が必須**
 
 API の操作対象になる Forma ハブを用意します。今回は Forma Data Management の30日トライアルを開始し、サンプルプロジェクト「Snowdon Towers」付きのハブを作成しました。
 
+開始したトライアルは、Autodesk Account の Trials 一覧でこのように有効表示されます（残り30日）。
+
+![Trials 一覧（Forma Data Management のトライアルが有効、残り30日）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/104_trials.jpg)
+
 ### ⚠️ つまづきポイント
 
 - **ハブはチームに属する。** サブスクリプションとハブはチーム単位の資産です（この性質が Step 5 の「カスタム統合が出ない」問題の原因になります）。
 - **ハブを作成できるのは、チームの primary / secondary admin（有効なサブスクリプションがあること）**です。自分にその権限がない場合は管理者への依頼が必要です。[^3]
 - **データリージョンは選べないことがある。** 今回のトライアルでは開始時に選択肢が提示されず、ハブのリージョンは米国になりました。リージョンが要件にある場合は先に確認してください。
 
-![Trials 一覧（Forma Data Management のトライアルが有効、残り30日）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/104_trials.jpg)
+作成されたハブは、ハブ一覧ではこのように表示されます。地域（データリージョン）は米国になっています。
+
 ![ハブ一覧（Forma ハブ、地域は米国）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/025_hubs_list.jpg)
 
 [^3]: [Collaboration | Autodesk Support](https://www.autodesk.com/support/account/admin/users/collaboration)
@@ -122,9 +137,25 @@ API の操作対象になる Forma ハブを用意します。今回は Forma Da
 
 APS ポータルで Developer Hub を作成し、その中にアプリを作成します。
 
+Developer Hub の作成は、チームと名前を指定するセットアップ画面から始まります。
+
+![APS Developer Hub のセットアップ](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/113_hub_setup_dialog.jpg)
+
+有効化が完了すると、Developer Hub がこのように使える状態になります。
+
+![Developer Hub の有効化完了](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/114_hub_activated.jpg)
+
 - Developer Hub はチームに紐づくもので、作成できるのは **team admin のみ**です[^4]
 - アプリは Traditional Web App（Authorization Code ＋ Client Credentials）を選択
 - コールバック URL は後段のログイン実装と**完全一致**させます（今回は `http://localhost:3000/callback`）
+
+作成したアプリの設定画面では、Client ID と Client Secret が発行されます（Secret は伏せ字表示で、この2つが API の鍵になります）。
+
+![アプリの Client Credentials（Client ID はマスキング、Secret は伏せ字表示）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/103_aps_app_settings.jpg)
+
+コールバック URL は、アプリ設定のこの欄に入力します。
+
+![コールバック URL の設定](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/116_callback_url.jpg)
 
 ### ⚠️ つまづきポイント
 
@@ -132,10 +163,8 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 - **コールバック URL が空欄だと保存エラー**になります。先に入力してから保存してください。
 - Client Secret の取り扱いは「パスワードと同等」です。`.env` 等に置き、リポジトリには絶対に含めないでください。
 
-![APS Developer Hub のセットアップ](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/113_hub_setup_dialog.jpg)
-![Developer Hub の有効化完了](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/114_hub_activated.jpg)
-![アプリの Client Credentials（Client ID はマスキング、Secret は伏せ字表示）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/103_aps_app_settings.jpg)
-![コールバック URL の設定](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/116_callback_url.jpg)
+API Access の選択リストはこのような項目構成になっていて、「Forma Site Design API」の単独項目は見当たりません。
+
 ![API Access の選択リスト](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/112_api_access_list.jpg)
 
 [^4]: [Developer hubs user guide | Autodesk Platform Services](https://aps.autodesk.com/blog/developer-hubs-user-guide)
@@ -147,6 +176,14 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 アプリの Client ID を、対象の Forma ハブ側の管理機能「カスタム統合（Custom Integrations）」に登録・承認する作業が必要です。APS のドキュメントではこの手続きを指して provisioning（プロビジョニング）という言葉が使われます。公式チュートリアルでも、プロビジョニングには対象ハブへの **admin アクセス** が必要とされています。[^5]
 
 手順は、Forma ハブの管理画面（Hub Admin）の「カスタム統合」を開き、Client ID を追加するだけです（現行 UI では左ナビの独立項目。旧 ACC UI では `Settings → Custom Integrations`）。[^6]
+
+追加は、このダイアログに Client ID と統合の名前を入力して行います。
+
+![「カスタム統合機能を追加」ダイアログ](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/105_add_integration_dialog.jpg)
+
+登録が完了すると、カスタム統合の一覧にアプリの行がこのように追加されます。
+
+![カスタム統合の一覧画面（登録済みアプリの行）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/101_custom_integrations.jpg)
 
 ### なぜこの仕組みがあるのか（同意モデルと許可の粒度）
 
@@ -164,6 +201,10 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 プロビジョニング前は、Data Management API の `GET /project/v1/hubs` が **HTTP 200 で、しかし中身は0件** で返ります。エラーにならないので「プロジェクトが無いのか？」と誤解しがちです。
 
 見分け方は「**data が0件で、`meta.warnings` に全リージョン分の `BIM360DM 403 "You don't have permission to access this API"` が入っている**」ことです。なお warnings 自体はプロビジョニング後も残りますが、**自分のハブがあるリージョンの警告だけが消えます**（この記事の検証環境では、登録前は US を含む全リージョン分 → 登録後は US の警告が消えてハブが1件返る、まで実応答で確認しました）。カスタム統合を登録すると、**数分の反映ラグ**のあとハブが見えるようになります。
+
+登録前後の実応答を比べると、hubs が 0件から1件に変わっていることが分かります。
+
+![hubs 0件 → 1件の比較（実応答 JSON の要約図）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/110_hubs_before_after.png)
 
 ### ⚠️ つまづきポイント②：「カスタム統合」の画面自体が出ない（企業アカウント）
 
@@ -183,10 +224,9 @@ APS ポータルで Developer Hub を作成し、その中にアプリを作成�
 
 カスタム統合を追加するとき、**統合がハブ管理者権限で動作する**旨の警告ダイアログが出ます。これは仕様です。権限を絞りたい場合は **Secure Service Accounts (SSA)** を使う構成が用意されています（SSA が無い統合はハブ管理者として動作し、SSA を紐づければプロジェクト単位で権限を制御できます）。[^7][^8]
 
-![カスタム統合の一覧画面（登録済みアプリの行）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/101_custom_integrations.jpg)
-![「カスタム統合機能を追加」ダイアログ](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/105_add_integration_dialog.jpg)
+追加の際には、統合がハブ管理者権限で動作する旨の警告ダイアログがこのように表示されます。
+
 ![アクセス権限の警告ダイアログ（ハブ管理者権限の表示）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/107_hub_admin_warning.jpg)
-![hubs 0件 → 1件の比較（実応答 JSON の要約図）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/110_hubs_before_after.png)
 
 [^5]: [APS Getting Started Tutorials](https://get-started.aps.autodesk.com/)
 [^6]: [Custom Integrations | Autodesk Forma Help](https://help.autodesk.com/cloudhelp/ENU/Docs-Admin/files/hub-administration/Custom_Integrations.html)
