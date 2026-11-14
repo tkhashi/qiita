@@ -24,7 +24,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 - 手順書にあるはずの「カスタム統合」という画面が**そもそも表示されない**ことがある
 - 無料のはずの Free プランで**クレジットカード登録**を求められる
 
-この記事は、2026年11月に新規アカウントから実際に構築した記録をもとに、「Forma の各種 API から実応答が返る状態」になるまでの手順と、つまづきポイント・その原因・回避策をまとめたものです。API の使い方そのもの（エンドポイント解説）ではなく、**叩けるようになるまで**が範囲です。
+この記事は、2026年11月に新規アカウントから実際に構築した記録をもとに、「Forma の各種 API から実応答が返る状態」になるまでの手順と、つまずきポイント・その原因・回避策をまとめたものです。API の使い方そのもの（エンドポイント解説）ではなく、**叩けるようになるまで**が範囲です。
 
 検証に使ったサンプルコードは別リポジトリで公開しています。
 
@@ -34,7 +34,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 ## 全体像：「ハブ」と「チーム」が3種類ある
 
-つまづきの半分は、この3つを混同することから起きます。
+つまずきの半分は、この3つを混同することから起きます。
 
 ![Forma API 環境構築の全体像](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/forma-overall-diagram.png)
 
@@ -84,7 +84,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 APS（Autodesk Platform Services）の現在のビジネスモデルでは、**チームに APS のオファリング（＝利用プラン。無料の Free tier 含む）を紐づけ、そのチームの中に Developer Hub を作る**ことが必須になっています。[^1]
 
-### ⚠️ つまづきポイント：無料でもクレジットカード登録が必要
+### ⚠️ つまずきポイント：無料でもクレジットカード登録が必要
 
 Free tier でも、**本人確認のために支払い方法の登録が必須**です。公式ページにも「A payment method is required to verify your identity. You won't be charged unless you choose to upgrade to a paid tier.」と明記されています。[^2]
 
@@ -110,7 +110,7 @@ API の操作対象になる Forma ハブを用意します。今回は Forma Da
 
 ![Trials 一覧（Forma Data Management のトライアルが有効、残り30日）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/104_trials.jpg)
 
-### ⚠️ つまづきポイント
+### ⚠️ つまずきポイント
 
 - **ハブはチームに属する。** サブスクリプションとハブはチーム単位の資産です（この性質が Step 5 の「カスタム統合が出ない」問題の原因になります）。
 - **ハブを作成できるのは、チームの primary / secondary admin（有効なサブスクリプションがあること）**です。自分にその権限がない場合は管理者への依頼が必要です。[^3]
@@ -146,7 +146,7 @@ Developer Hub の作成は、チームと名前を指定するセットアップ
 
 ![コールバック URL の設定](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/116_callback_url.jpg)
 
-### ⚠️ つまづきポイント
+### ⚠️ つまずきポイント
 
 - **API Access の選択リストに「Forma Site Design API」という単独項目はありません。** Design 側の API は「Forma API」に含まれます。リストで探して見つからなくても故障ではありません。
 - **コールバック URL が空欄だと保存エラー**になります。先に入力してから保存してください。
@@ -185,7 +185,7 @@ API Access の選択リストはこのような項目構成になっていて、
 
 つまり「許可したハブのプロジェクトに限定される」という理解は方向としては正しいものの、既定の限定単位はプロジェクトではなく**ハブ**です。
 
-### ⚠️ つまづきポイント①：200 なのに 0 件
+### ⚠️ つまずきポイント①：200 なのに 0 件
 
 プロビジョニング前は、Data Management API の `GET /project/v1/hubs` が **HTTP 200 で、しかし中身は0件** で返ります。エラーにならないので「プロジェクトが無いのか？」と誤解しがちです。
 
@@ -195,7 +195,7 @@ API Access の選択リストはこのような項目構成になっていて、
 
 ![hubs 0件 → 1件の比較（実応答 JSON の要約図）](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/110_hubs_before_after.png)
 
-### ⚠️ つまづきポイント②：「カスタム統合」の画面自体が出ない（企業アカウント）
+### ⚠️ つまずきポイント②：「カスタム統合」の画面自体が出ない（企業アカウント）
 
 ライセンスを割り当ててもらっても、カスタム統合の画面自体が表示されないケースがあります。原因は **ライセンス／サブスクリプションが「チーム」に紐づいている**ことです。
 
@@ -209,7 +209,7 @@ API Access の選択リストはこのような項目構成になっていて、
 2. ライセンスを割り当ててもらう
 3. カスタム統合が使えるチーム紐づきのハブを作ってもらい、そのハブの管理者権限を付けてもらう
 
-### ⚠️ つまづきポイント③：統合は既定で「ハブ管理者」権限
+### ⚠️ つまずきポイント③：統合は既定で「ハブ管理者」権限
 
 カスタム統合を追加するとき、**統合がハブ管理者権限で動作する**旨の警告ダイアログが出ます。これは仕様です。権限を絞りたい場合は **Secure Service Accounts (SSA)** を使う構成が用意されています（SSA が無い統合はハブ管理者として動作し、SSA を紐づければプロジェクト単位で権限を制御できます）。[^7][^8]
 
@@ -234,13 +234,13 @@ GET /project/v1/hubs/{hubId}/projects/{projectId}/topFolders
 
 3つとも 200 で実データが返れば、環境構築は完了です（サンプルリポジトリの `sample-a-http-client` で `npm run acc` がこの確認です）。
 
-### ⚠️ つまづきポイント
+### ⚠️ つまずきポイント
 
 - **2-legged（Client Credentials）で叩けるのは一部だけ。** RFIs や Forms のようなドメイン API はユーザー文脈が必須で、2-legged では RFIs が 403（`missing userid in x-ads-token-data header`）、Forms が 401 になります。**3-legged（Authorization Code + PKCE）** を用意してください。
 - **ドメイン API のプロジェクト ID は `b.` 接頭辞なし**です。Data Management で得た ID をそのまま使うと合わないことがあります。
 - フォルダの中身の取得やフォルダ作成が 404 になるケースがありました（topFolders の一覧は返るのに、その先が 404）。トライアルハブでは一部機能が有効化されていない可能性があります。「一覧が返る＝全部使える」ではありません。
 
-## つまづきポイント総覧
+## つまずきポイント総覧
 
 | # | 症状 | 原因 | 対処 |
 |---|---|---|---|
