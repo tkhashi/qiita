@@ -36,7 +36,7 @@ Autodesk Forma（旧 Autodesk Construction Cloud / ACC）の API を使って自
 
 つまずきの半分は、この3つを混同することから起きます。
 
-![Forma API 環境構築の全体像](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/forma-overall-diagram.png)
+![Forma API 環境構築の全体像](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/forma-overall-diagram-v2.png)
 
 | 名前 | 何か | どこで作るか |
 |---|---|---|
@@ -132,7 +132,7 @@ Developer Hub の作成は、チームと名前を指定するセットアップ
 
 有効化が完了すると、Developer Hub がこのように使える状態になります。
 
-![Developer Hub の有効化完了](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/114_hub_activated.jpg)
+![Developer Hub の有効化完了](https://raw.githubusercontent.com/tkhashi/qiita/main/assets/forma-api-environment-setup/114_hub_activated-masked-v2.jpg)
 
 - Developer Hub はチームに紐づくもので、作成できるのは **team admin のみ**です[^4]
 - アプリは Traditional Web App（Authorization Code ＋ Client Credentials）を選択
